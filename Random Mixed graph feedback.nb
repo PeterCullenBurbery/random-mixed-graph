@@ -218,8 +218,11 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{
      RowBox[{"RandomMixedGraph", "[", 
-      RowBox[{"graphDistribution_", ",", "threshold_", ",", "k_"}], "]"}], "/;", 
-     RowBox[{"0", "<=", "threshold", "<=", "1"}]}], ":=", 
+      RowBox[{"graphDistribution_", ",", "threshold_", ",", 
+       RowBox[{"k_", "?", "IntegerQ"}]}], "]"}], "/;", 
+     RowBox[{
+      RowBox[{"0", "<=", "threshold", "<=", "1"}], "\[And]", 
+      RowBox[{"k", ">=", "1"}]}]}], ":=", 
     RowBox[{"Block", "[", 
      RowBox[{
       RowBox[{"{", "randomGraphList", "}"}], " ", ",", 
@@ -267,6 +270,64 @@ Cell[BoxData[{
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
+   RowBox[{
+    RowBox[{"RandomMixedGraph", "[", 
+     RowBox[{"graphDistribution_", ",", "threshold_", ",", "array_List"}], 
+     "]"}], "/;", 
+    RowBox[{"0", "<=", "threshold", "<=", "1"}]}], ":=", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"randomGraph", "\[Function]", 
+          RowBox[{"Graph", "[", 
+           RowBox[{
+            RowBox[{"Fold", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"EdgeAdd", "[", 
+                RowBox[{
+                 RowBox[{"EdgeDelete", "[", 
+                  RowBox[{"#1", ",", "#2"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"First", "[", "#2", "]"}], "\[DirectedEdge]", 
+                  RowBox[{"Last", "[", "#2", "]"}]}]}], "]"}], "&"}], ",", 
+              "randomGraph", ",", 
+              RowBox[{"RandomSample", "[", 
+               RowBox[{
+                RowBox[{"EdgeList", "[", "randomGraph", "]"}], ",", 
+                RowBox[{"\[LeftFloor]", 
+                 RowBox[{"threshold", " ", 
+                  RowBox[{"EdgeCount", "[", "randomGraph", "]"}]}], 
+                 "\[RightFloor]"}]}], "]"}]}], "]"}], ",", 
+            RowBox[{"EdgeWeight", "->", 
+             RowBox[{"Thread", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"EdgeList", "[", "randomGraph", "]"}], "->", 
+                 RowBox[{"(", 
+                  RowBox[{"AnnotationValue", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"randomGraph", ",", "#1"}], "}"}], ",", 
+                    "EdgeWeight"}], "]"}], ")"}]}], "&"}], "/@", 
+               RowBox[{"EdgeList", "[", "randomGraph", "]"}]}], "]"}]}]}], 
+           "]"}]}], ")"}], "[", "k", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"k", ",", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"RandomGraph", "[", 
+           RowBox[{
+            RowBox[{"BarabasiAlbertGraphDistribution", "[", 
+             RowBox[{"40", ",", "3"}], "]"}], ",", "array"}], "]"}], "]"}]}], 
+        "}"}]}], "]"}], ",", 
+     RowBox[{"Sequence", "@@", "array"}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
    RowBox[{"RandomMixedGraph", "::", "usage"}], "=", 
    "\"\<RandomMixedGraph[{vertices,edges},threshhold] creates a random graph \
 with vertices and edges with a fraction threshhold converted to directed arcs\
@@ -276,9 +337,12 @@ random mixed graphs that have a fraction threshhold of directed arcs between \
 edges\\nRandomMixedGraph[distribution, threshhold] creates an undirected \
 graph from distribution and converts threshhold of the undirected edges into \
 directed edges to make a mixed graph\\nRandomMixedGraph[distribution, \
-threshholdk] creates an array k of undirected graphs from distribution and \
-converts threshhold of the undirected edges into directed arcs to make an \
-array k of mixed graphs\>\""}], ";"}]}], "Input",
+threshhold,k] creates a list of k undirected graphs from distribution and \
+converts threshhold of the undirected edges into directed arcs to make mixed \
+graphs\\nRandomMixedGraph[distribution, threshhold, array] creates a list of \
+undirected graphs with dimensions array from distribution and converts \
+threshhold of the undirected edges into directed arcs to make mixed \
+graphs\>\""}], ";"}]}], "Input",
  TaggingRules->{},
  CellChangeTimes->{{3.862514598152813*^9, 3.8625146643096743`*^9}, {
   3.8625148341652822`*^9, 3.8625148734867306`*^9}, {3.862514920792667*^9, 
@@ -286,9 +350,13 @@ array k of mixed graphs\>\""}], ";"}]}], "Input",
   3.866210355893478*^9, 3.866210357581464*^9}, {3.8662104173064766`*^9, 
   3.866210549932575*^9}, {3.8662105848375998`*^9, 3.8662106067546015`*^9}, {
   3.866211164177085*^9, 3.8662112026140957`*^9}, {3.8662813671123753`*^9, 
-  3.866281414628555*^9}, {3.8662832055192986`*^9, 3.866283224051365*^9}},
+  3.866281414628555*^9}, {3.8662832055192986`*^9, 3.866283224051365*^9}, {
+  3.8663743796136255`*^9, 3.866374391694162*^9}, {3.866374458008666*^9, 
+  3.8663744732033544`*^9}, {3.8663745037087803`*^9, 3.8663745170584574`*^9}, {
+  3.8663745562534647`*^9, 3.8663746018814497`*^9}, {3.8663746833153915`*^9, 
+  3.866374727716049*^9}},
  CellTags->"DefaultContent",
- CellLabel->"In[1]:=",
+ CellLabel->"In[187]:=",
  CellID->24911376,ExpressionUUID->"d0e59ff5-2ab2-4e0b-b191-fc43ed8c6a2a"]
 }, Open  ]],
 
@@ -1194,13 +1262,13 @@ Cell[BoxData[
  RowBox[{"RandomMixedGraph", "[", 
   RowBox[{
    RowBox[{"{", 
-    RowBox[{"7", ",", "20"}], "}"}], ",", 
+    RowBox[{"12", ",", "20"}], "}"}], ",", 
    RowBox[{"2", "/", "3"}], ",", "3"}], "]"}]], "Input",
  TaggingRules->{},
  CellChangeTimes->{{3.866211045284207*^9, 3.866211083980203*^9}, {
   3.8662111259452033`*^9, 3.866211127007208*^9}, {3.8662112117180815`*^9, 
-  3.866211214557094*^9}},
- CellLabel->"In[86]:=",
+  3.866211214557094*^9}, {3.8663731446714306`*^9, 3.8663731621900253`*^9}},
+ CellLabel->"In[163]:=",
  CellID->471728795,ExpressionUUID->"fdaa9656-6176-41f3-9b1a-d14ad4fe3a52"],
 
 Cell[BoxData[
@@ -1209,48 +1277,53 @@ Cell[BoxData[
    GraphicsBox[
     NamespaceBox["NetworkGraphics",
      DynamicModuleBox[{Typeset`graph = HoldComplete[
-       Graph[{1, 2, 3, 4, 5, 6, 7}, {{{0, 0, 1, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 
-        1, 1}, {0, 0, 0, 1, 0, 0, 1}, {0, 0, 0, 0, 1, 0, 1}, {0, 0, 0, 0, 0, 
-        0, 0}, {0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0}}, {{0, 1, 0, 0, 0,
-         0, 0}, {0, 0, 0, 1, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 0}, {0, 0, 0, 0, 0, 
-        1, 0}, {0, 0, 0, 0, 0, 1, 1}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 
-        0, 0}}}, {
+       Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, CompressedData["
+1:eJxTTMoPymNmYGBgAmIeKEYGjDhodHlscuQCRjLNIlcfMeYOVkCK28gNU0oB
+LjNINXug0xe9ALluG8x+IgUAAIUNAeQ=
+        "], {
         EdgeWeight -> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1}, GraphLayout -> {"Dimension" -> 2}}]]}, 
       TagBox[
        GraphicsGroupBox[
-        GraphicsComplexBox[{{0.6329479345367177, 1.2188279370328112`}, {
-         1.818977201413981, 0.6077563266512819}, {0., 0.6089284558450082}, {
-         0.7842030559372443, 0.6079723527318818}, {1.256616143217225, 
-         1.1194836624990514`}, {0.6313093492163848, 0.}, {1.2548294993340903`,
-          0.09634379089980438}}, {
+        GraphicsComplexBox[{{2.9412675032808586`, 1.603258848613224}, {
+         1.4185999593504965`, 0.4670362526680115}, {0.7933112659390782, 
+         0.7754343327745188}, {2.7743846495931725`, 2.018972674369037}, {
+         3.6702095076942385`, 2.259860061502893}, {2.0736929085694618`, 
+         2.3775182462931665`}, {0., 2.605540173358241}, {3.3585255301950574`, 
+         0.7313884324368896}, {0.9842464264512782, 1.9821271576289572`}, {
+         1.560959231770013, 0.}, {2.3800486571351875`, 0.892185011092068}, {
+         2.0502165189664288`, 1.6868874575886277`}}, {
           {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[Medium], 
-           {Arrowheads[0.], ArrowBox[{1, 2}, 0.021125527536842187`]}, 
-           ArrowBox[{1, 3}, 0.021125527536842187`], 
-           ArrowBox[{1, 6}, 0.021125527536842187`], 
-           {Arrowheads[0.], ArrowBox[{1, 5}, 0.021125527536842187`]}, 
-           {Arrowheads[0.], ArrowBox[{1, 4}, 0.021125527536842187`]}, 
-           ArrowBox[{1, 7}, 0.021125527536842187`], 
-           {Arrowheads[0.], ArrowBox[{2, 4}, 0.021125527536842187`]}, 
-           ArrowBox[{2, 6}, 0.021125527536842187`], 
-           {Arrowheads[0.], ArrowBox[{2, 5}, 0.021125527536842187`]}, 
-           ArrowBox[{2, 7}, 0.021125527536842187`], 
-           {Arrowheads[0.], ArrowBox[{3, 5}, 0.021125527536842187`]}, 
-           {Arrowheads[0.], ArrowBox[{3, 6}, 0.021125527536842187`]}, 
-           ArrowBox[{3, 4}, 0.021125527536842187`], 
-           ArrowBox[{3, 7}, 0.021125527536842187`], 
-           {Arrowheads[0.], ArrowBox[{4, 6}, 0.021125527536842187`]}, 
-           ArrowBox[{4, 5}, 0.021125527536842187`], 
-           ArrowBox[{4, 7}, 0.021125527536842187`], 
-           {Arrowheads[0.], ArrowBox[{5, 6}, 0.021125527536842187`]}, 
-           {Arrowheads[0.], ArrowBox[{5, 7}, 0.021125527536842187`]}, 
-           ArrowBox[{6, 7}, 0.021125527536842187`]}, 
+           {Arrowheads[0.], ArrowBox[{1, 5}, 0.034860340969745454`]}, 
+           {Arrowheads[0.], ArrowBox[{1, 11}, 0.034860340969745454`]}, 
+           ArrowBox[{1, 8}, 0.034860340969745454`], 
+           {Arrowheads[0.], ArrowBox[{1, 6}, 0.034860340969745454`]}, 
+           {Arrowheads[0.], ArrowBox[{1, 4}, 0.034860340969745454`]}, 
+           ArrowBox[{1, 12}, 0.034860340969745454`], 
+           {Arrowheads[0.], ArrowBox[{2, 11}, 0.034860340969745454`]}, 
+           ArrowBox[{2, 3}, 0.034860340969745454`], 
+           ArrowBox[{3, 9}, 0.034860340969745454`], 
+           ArrowBox[{3, 10}, 0.034860340969745454`], 
+           {Arrowheads[0.], ArrowBox[{4, 5}, 0.034860340969745454`]}, 
+           {Arrowheads[0.], ArrowBox[{4, 6}, 0.034860340969745454`]}, 
+           ArrowBox[{4, 11}, 0.034860340969745454`], 
+           ArrowBox[{4, 12}, 0.034860340969745454`], 
+           ArrowBox[{6, 9}, 0.034860340969745454`], 
+           {Arrowheads[0.], ArrowBox[{7, 9}, 0.034860340969745454`]}, 
+           {Arrowheads[0.], ArrowBox[{8, 11}, 0.034860340969745454`]}, 
+           ArrowBox[{9, 12}, 0.034860340969745454`], 
+           ArrowBox[{10, 11}, 0.034860340969745454`], 
+           ArrowBox[{11, 12}, 0.034860340969745454`]}, 
           {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
-           DiskBox[1, 0.021125527536842187], DiskBox[2, 0.021125527536842187],
-            DiskBox[3, 0.021125527536842187], 
-           DiskBox[4, 0.021125527536842187], DiskBox[5, 0.021125527536842187],
-            DiskBox[6, 0.021125527536842187], 
-           DiskBox[7, 0.021125527536842187]}}]],
+           DiskBox[1, 0.034860340969745454], DiskBox[2, 0.034860340969745454],
+            DiskBox[3, 0.034860340969745454], 
+           DiskBox[4, 0.034860340969745454], DiskBox[5, 0.034860340969745454],
+            DiskBox[6, 0.034860340969745454], 
+           DiskBox[7, 0.034860340969745454], DiskBox[8, 0.034860340969745454],
+            DiskBox[9, 0.034860340969745454], 
+           DiskBox[10, 0.034860340969745454], 
+           DiskBox[11, 0.034860340969745454], 
+           DiskBox[12, 0.034860340969745454]}}]],
        MouseAppearanceTag["NetworkGraphics"]],
       AllowKernelInitialization->False]],
     DefaultBaseStyle->{
@@ -1260,48 +1333,51 @@ Cell[BoxData[
    GraphicsBox[
     NamespaceBox["NetworkGraphics",
      DynamicModuleBox[{Typeset`graph = HoldComplete[
-       Graph[{1, 2, 3, 4, 5, 6, 7}, {{{0, 1, 1, 1, 0, 0, 1}, {0, 0, 0, 0, 1, 
-        0, 1}, {0, 0, 0, 0, 1, 1, 1}, {0, 0, 0, 0, 1, 1, 0}, {0, 0, 0, 0, 0, 
-        1, 0}, {0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0}}, {{0, 0, 0, 0, 1,
-         1, 0}, {0, 0, 1, 1, 0, 0, 0}, {0, 0, 0, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 
-        0, 1}, {0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 
-        0, 0}}}, {
+       Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, CompressedData["
+1:eJxTTMoPymNmYGBgAmIeKAYBRiQaxsbGxwfI1UcsINVMathPb/tGIsAXr6SG
+KS3igB7xSms7BnPaBACIPQHk
+        "], {
         EdgeWeight -> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1}, GraphLayout -> {"Dimension" -> 2}}]]}, 
       TagBox[
        GraphicsGroupBox[
-        GraphicsComplexBox[{{1.2490019314225365`, 1.1244385115390843`}, {
-         1.815981323376053, 0.5942575701429224}, {0.822665585984496, 
-         0.5944843648773207}, {0.6143907747052029, 1.1906483398485472`}, {
-         0.6143520840267715, 0.}, {0., 0.5951225178070834}, {
-         1.2484985449967119`, 0.06745273241463079}}, {
+        GraphicsComplexBox[{{3.9395599043180236`, 0.8465780424555871}, {
+         2.5328683641362875`, 1.264989284418847}, {0., 0.4582031240636245}, {
+         3.90101948042381, 0.17836508699040465`}, {3.6383225305655884`, 
+         1.4343770007911236`}, {1.4074970014923924`, 1.3846141534119143`}, {
+         3.13227140338532, 1.17242664898862}, {4.670442455585238, 0.}, {
+         4.280533468830292, 1.8108486167330606`}, {3.3513997075448985`, 
+         2.023244387641649}, {2.4111104791683866`, 1.9892933283498708`}, {
+         1.0895261800346105`, 0.81047159447043}}, {
           {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[Medium], 
-           {Arrowheads[0.], ArrowBox[{1, 5}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{1, 6}, 0.021100644018767795`]}, 
-           ArrowBox[{1, 3}, 0.021100644018767795`], 
-           {Arrowheads[0.], ArrowBox[{1, 2}, 0.021100644018767795`]}, 
-           ArrowBox[{1, 7}, 0.021100644018767795`], 
-           {Arrowheads[0.], ArrowBox[{1, 4}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{2, 3}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{2, 4}, 0.021100644018767795`]}, 
-           ArrowBox[{2, 7}, 0.021100644018767795`], 
-           {Arrowheads[0.], ArrowBox[{2, 5}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{3, 4}, 0.021100644018767795`]}, 
-           ArrowBox[{3, 7}, 0.021100644018767795`], 
-           {Arrowheads[0.], ArrowBox[{3, 6}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{3, 5}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{4, 7}, 0.021100644018767795`]}, 
-           ArrowBox[{4, 6}, 0.021100644018767795`], 
-           {Arrowheads[0.], ArrowBox[{4, 5}, 0.021100644018767795`]}, 
-           {Arrowheads[0.], ArrowBox[{5, 7}, 0.021100644018767795`]}, 
-           ArrowBox[{5, 6}, 0.021100644018767795`], 
-           ArrowBox[{6, 7}, 0.021100644018767795`]}, 
+           ArrowBox[{1, 4}, 0.04112945946536349], 
+           ArrowBox[{1, 5}, 0.04112945946536349], 
+           ArrowBox[{1, 9}, 0.04112945946536349], 
+           ArrowBox[{1, 2}, 0.04112945946536349], 
+           ArrowBox[{1, 8}, 0.04112945946536349], 
+           {Arrowheads[0.], ArrowBox[{2, 5}, 0.04112945946536349]}, 
+           {Arrowheads[0.], ArrowBox[{2, 6}, 0.04112945946536349]}, 
+           {Arrowheads[0.], ArrowBox[{2, 12}, 0.04112945946536349]}, 
+           ArrowBox[{2, 7}, 0.04112945946536349], 
+           ArrowBox[{2, 11}, 0.04112945946536349], 
+           {Arrowheads[0.], ArrowBox[{2, 10}, 0.04112945946536349]}, 
+           {Arrowheads[0.], ArrowBox[{3, 12}, 0.04112945946536349]}, 
+           ArrowBox[{4, 8}, 0.04112945946536349], 
+           {Arrowheads[0.], ArrowBox[{4, 7}, 0.04112945946536349]}, 
+           {Arrowheads[0.], ArrowBox[{5, 9}, 0.04112945946536349]}, 
+           ArrowBox[{5, 7}, 0.04112945946536349], 
+           ArrowBox[{6, 12}, 0.04112945946536349], 
+           {Arrowheads[0.], ArrowBox[{7, 10}, 0.04112945946536349]}, 
+           ArrowBox[{7, 11}, 0.04112945946536349], 
+           {Arrowheads[0.], ArrowBox[{9, 10}, 0.04112945946536349]}}, 
           {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
-           DiskBox[1, 0.021100644018767795], DiskBox[2, 0.021100644018767795],
-            DiskBox[3, 0.021100644018767795], 
-           DiskBox[4, 0.021100644018767795], DiskBox[5, 0.021100644018767795],
-            DiskBox[6, 0.021100644018767795], 
-           DiskBox[7, 0.021100644018767795]}}]],
+           DiskBox[1, 0.04112945946536349], DiskBox[2, 0.04112945946536349], 
+           DiskBox[3, 0.04112945946536349], DiskBox[4, 0.04112945946536349], 
+           DiskBox[5, 0.04112945946536349], DiskBox[6, 0.04112945946536349], 
+           DiskBox[7, 0.04112945946536349], DiskBox[8, 0.04112945946536349], 
+           DiskBox[9, 0.04112945946536349], DiskBox[10, 0.04112945946536349], 
+           DiskBox[11, 0.04112945946536349], 
+           DiskBox[12, 0.04112945946536349]}}]],
        MouseAppearanceTag["NetworkGraphics"]],
       AllowKernelInitialization->False]],
     DefaultBaseStyle->{
@@ -1311,47 +1387,51 @@ Cell[BoxData[
    GraphicsBox[
     NamespaceBox["NetworkGraphics",
      DynamicModuleBox[{Typeset`graph = HoldComplete[
-       Graph[{1, 2, 3, 4, 5, 6, 7}, {{{0, 1, 0, 1, 1, 1, 0}, {0, 0, 0, 1, 0, 
-        0, 0}, {0, 0, 0, 1, 1, 1, 1}, {0, 0, 0, 0, 1, 0, 1}, {0, 0, 0, 0, 0, 
-        1, 0}, {0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0}}, {{0, 0, 0, 0, 0,
-         0, 1}, {0, 0, 1, 0, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 
-        1, 0}, {0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 
-        0, 0}}}, {
+       Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, CompressedData["
+1:eJxTTMoPymNmYGBgAmIeKIYBRiSakQETYBPHpg6fOC5ArHpSzSXXDkrsoQUY
+bO5BB9RwHyMaTWtAij20dtNgjF96uQkAhw0B5A==
+        "], {
         EdgeWeight -> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
           1, 1}, GraphLayout -> {"Dimension" -> 2}}]]}, 
       TagBox[
        GraphicsGroupBox[
-        GraphicsComplexBox[{{0., 0.6110861108134568}, {1.2571509818093523`, 
-         0.10052168986184629`}, {1.8225108137975303`, 0.6093014615759507}, {
-         0.780762335970868, 0.6109016953430725}, {0.637738778216904, 
-         1.220164332192128}, {1.2580387139718208`, 1.1189138538431784`}, {
-         0.6352241014021773, 0.}}, {
+        GraphicsComplexBox[{{3.2973775875584357`, 1.4270889473060788`}, {
+         2.1975298025233214`, 0.7550118421636252}, {3.9286572384777507`, 
+         1.1919298173541852`}, {1.1277079792289817`, 1.3956961540598307`}, {
+         2.8263223997698477`, 1.9252744239984871`}, {3.5561377414975777`, 
+         0.39884209611214494`}, {2.0416570492698054`, 0.009558747750574748}, {
+         0., 1.6093072698413282`}, {2.9001996169998723`, 0.}, {
+         2.8486393225987285`, 0.834418497947461}, {2.2235346417091293`, 
+         1.6162435282508913`}, {4.418005667568194, 2.054944484022615}}, {
           {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[Medium], 
-           {Arrowheads[0.], ArrowBox[{1, 7}, 0.02115486508650033]}, 
-           ArrowBox[{1, 4}, 0.02115486508650033], 
-           {Arrowheads[0.], ArrowBox[{1, 2}, 0.02115486508650033]}, 
-           ArrowBox[{1, 5}, 0.02115486508650033], 
-           ArrowBox[{1, 6}, 0.02115486508650033], 
-           {Arrowheads[0.], ArrowBox[{2, 3}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{2, 5}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{2, 6}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{2, 7}, 0.02115486508650033]}, 
-           ArrowBox[{2, 4}, 0.02115486508650033], 
-           ArrowBox[{3, 7}, 0.02115486508650033], 
-           {Arrowheads[0.], ArrowBox[{3, 6}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{3, 5}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{3, 4}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{4, 6}, 0.02115486508650033]}, 
-           ArrowBox[{4, 7}, 0.02115486508650033], 
-           {Arrowheads[0.], ArrowBox[{4, 5}, 0.02115486508650033]}, 
-           {Arrowheads[0.], ArrowBox[{5, 7}, 0.02115486508650033]}, 
-           ArrowBox[{5, 6}, 0.02115486508650033], 
-           ArrowBox[{6, 7}, 0.02115486508650033]}, 
+           {Arrowheads[0.], ArrowBox[{1, 2}, 0.03961257454621156]}, 
+           ArrowBox[{1, 5}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{1, 3}, 0.03961257454621156]}, 
+           ArrowBox[{1, 12}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{1, 6}, 0.03961257454621156]}, 
+           {Arrowheads[0.], ArrowBox[{1, 11}, 0.03961257454621156]}, 
+           {Arrowheads[0.], ArrowBox[{2, 7}, 0.03961257454621156]}, 
+           {Arrowheads[0.], ArrowBox[{2, 9}, 0.03961257454621156]}, 
+           ArrowBox[{2, 10}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{2, 4}, 0.03961257454621156]}, 
+           ArrowBox[{3, 10}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{4, 11}, 0.03961257454621156]}, 
+           ArrowBox[{4, 8}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{5, 10}, 0.03961257454621156]}, 
+           ArrowBox[{5, 11}, 0.03961257454621156], 
+           ArrowBox[{6, 9}, 0.03961257454621156], 
+           ArrowBox[{6, 10}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{7, 10}, 0.03961257454621156]}, 
+           ArrowBox[{9, 10}, 0.03961257454621156], 
+           {Arrowheads[0.], ArrowBox[{10, 11}, 0.03961257454621156]}}, 
           {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
-           DiskBox[1, 0.02115486508650033], DiskBox[2, 0.02115486508650033], 
-           DiskBox[3, 0.02115486508650033], DiskBox[4, 0.02115486508650033], 
-           DiskBox[5, 0.02115486508650033], DiskBox[6, 0.02115486508650033], 
-           DiskBox[7, 0.02115486508650033]}}]],
+           DiskBox[1, 0.03961257454621156], DiskBox[2, 0.03961257454621156], 
+           DiskBox[3, 0.03961257454621156], DiskBox[4, 0.03961257454621156], 
+           DiskBox[5, 0.03961257454621156], DiskBox[6, 0.03961257454621156], 
+           DiskBox[7, 0.03961257454621156], DiskBox[8, 0.03961257454621156], 
+           DiskBox[9, 0.03961257454621156], DiskBox[10, 0.03961257454621156], 
+           DiskBox[11, 0.03961257454621156], 
+           DiskBox[12, 0.03961257454621156]}}]],
        MouseAppearanceTag["NetworkGraphics"]],
       AllowKernelInitialization->False]],
     DefaultBaseStyle->{
@@ -1360,9 +1440,10 @@ Cell[BoxData[
     FrameTicks->None]}], "}"}]], "Output",
  TaggingRules->{},
  CellChangeTimes->{{3.8662110651872125`*^9, 3.866211084389209*^9}, 
-   3.866211140666206*^9, 3.866211215908081*^9, 3.8662826030709095`*^9},
- CellLabel->"Out[86]=",
- CellID->314754560,ExpressionUUID->"0a4272fd-4a99-4dde-95d7-9f0c07fdd896"]
+   3.866211140666206*^9, 3.866211215908081*^9, 3.8662826030709095`*^9, 
+   3.8663731632491827`*^9},
+ CellLabel->"Out[163]=",
+ CellID->20543528,ExpressionUUID->"012e38a0-ef83-4cc5-9e34-16a9f20566e5"]
 }, Open  ]],
 
 Cell["Create a mixed graph from a graph distribution.", "Text",
@@ -2693,2100 +2774,25 @@ Cell[BoxData[
   RowBox[{
    RowBox[{"BernoulliGraphDistribution", "[", 
     RowBox[{"10", ",", ".2"}], "]"}], ",", ".2", ",", 
-   RowBox[{"{", 
-    RowBox[{"2", ",", "1"}], "}"}]}], "]"}]], "Input",
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.8662838363357573`*^9, 3.866283847511816*^9}, {
    3.8662838888249817`*^9, 3.8662839095147085`*^9}, {3.8662839973730183`*^9, 
-   3.8662840152085648`*^9}, 3.866284099660386*^9},
- CellLabel->"In[9]:=",
+   3.8662840152085648`*^9}, 3.866284099660386*^9, {3.8663745283658075`*^9, 
+   3.866374540479288*^9}},
+ CellLabel->"In[172]:=",
  CellID->161478728,ExpressionUUID->"ccbe9c21-feed-4a70-b0a7-ccde3d994100"],
 
 Cell[BoxData[
- TemplateBox[{
-  "EdgeList", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\).\"", 2, 9, 19, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841009454093`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->710665847,ExpressionUUID->"08a67996-3fc6-4c5e-8d51-0b28096cb824"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeCount", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeCount\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\).\"", 2, 9, 20, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284102090751*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->840094296,ExpressionUUID->"006bacbd-954a-4b96-ad8d-7ce2c9c27761"],
-
-Cell[BoxData[
- TemplateBox[{
-  "RandomSample", "lrwl", 
-   "\"The set of items to sample from, \\!\\(\\*RowBox[{\\\"EdgeList\\\", \
-\\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\), should be a non-empty list or a rule weights -> choices.\"", 
-   2, 9, 21, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841032081227`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->5713957,ExpressionUUID->"49d4187d-4a9a-4b0b-ba00-30401bb15481"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeDelete", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\",\\\", RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}]\\).\"", 2, 9, 22, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841051028757`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->106515634,ExpressionUUID->"0eeb4845-22d7-4a66-a94d-35de1deff735"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeAdd", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeAdd\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\",\\\", RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"\[DirectedEdge]\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \
-\\\"}\\\"}]}]}], \\\"]\\\"}]\\).\"", 2, 9, 23, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.86628411310013*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->37567100,ExpressionUUID->"309fcfd6-0b05-48c5-9e4f-3aa4d7e071c7"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeDelete", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeAdd\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\",\\\", RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"\[DirectedEdge]\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \
-\\\"}\\\"}]}]}], \\\"]\\\"}], \\\",\\\", RowBox[{\\\"Floor\\\", \\\"[\\\", \
-RowBox[{\\\"0.2`\\\", \\\" \\\", RowBox[{\\\"EdgeCount\\\", \\\"[\\\", \
-RowBox[{\\\"{\\\", GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}]}], \\\"]\\\"}]\\).\"", 2, 9, 24, 
-   19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284114430894*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->1094001,ExpressionUUID->"78b02a92-24a1-4db6-a05e-e8f44ba882d2"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeAdd", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeAdd\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeAdd\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\",\\\", RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"\[DirectedEdge]\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \
-\\\"}\\\"}]}]}], \\\"]\\\"}], \\\",\\\", RowBox[{\\\"Floor\\\", \\\"[\\\", \
-RowBox[{\\\"0.2`\\\", \\\" \\\", RowBox[{\\\"EdgeCount\\\", \\\"[\\\", \
-RowBox[{\\\"{\\\", GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}]}], \\\"]\\\"}], \\\",\\\", \
-RowBox[{RowBox[{\\\"0.2`\\\", \\\" \\\", RowBox[{\\\"EdgeCount\\\", \
-\\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"\[DirectedEdge]\\\", RowBox[{\\\"0.2`\\\", \\\" \\\", \
-RowBox[{\\\"EdgeCount\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}]}]}], \\\"]\\\"}]\\).\"", 2, 9, 25, 19441317491031776571, 
-   "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284115817962*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->37418880,ExpressionUUID->"65187821-a946-4d09-afac-7498f5fe6f5c"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeList", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\).\"", 2, 9, 26, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284117170849*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->24425890,ExpressionUUID->"fb14f196-b4f3-42bd-912d-536a9707a28e"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeList", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\).\"", 2, 9, 27, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284118510849*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->776856795,ExpressionUUID->"56c19ceb-2a35-4636-8d2b-8e2fc308b6de"],
-
-Cell[BoxData[
- TemplateBox[{
-  "General", "stop", 
-   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"EdgeList\\\", \
-\\\"::\\\", \\\"graph\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
-during this calculation.\"", 2, 9, 28, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841199848356`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->756972522,ExpressionUUID->"84afb712-3fa2-42e5-bbe0-7e6194fa87b1"],
-
-Cell[BoxData[
- TemplateBox[{
-  "AnnotationValue", "pvobj", 
-   "\"\\!\\(\\*RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14], List[List[3], \
-List[10], List[1], List[6], List[9], List[3], List[7], List[8], List[6], \
-List[6], List[10], List[3], List[2], List[8]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[5.034199127659932`, \
--0.2888748111896138`], List[0.288874811189614`, -0.859275677191532`], \
-List[4.488771736800847`, -1.0022339602446049`], List[3.0980146504803967`, \
--2.7588498459172364`], List[0.28887481118961383`, -2.7588498459172364`], \
-List[3.339675211070711`, -1.3281124841780385`], List[3.335172127865607`, \
--2.1811002235380084`], List[2.1911495616350702`, -1.1313103046413384`], \
-List[5.329404867391951`, -1.3355873340720468`], List[1.1480243570824133`, \
--0.9791787816726583`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[1, 3], List[2, 10], List[3, \
-6], List[3, 9], List[6, 7], List[6, 8], List[8, 10]], \
-0.04327943265200852`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.04327943265200852`], DiskBox[2, 0.04327943265200852`], DiskBox[3, \
-0.04327943265200852`], DiskBox[4, 0.04327943265200852`], DiskBox[5, \
-0.04327943265200852`], DiskBox[6, 0.04327943265200852`], DiskBox[7, \
-0.04327943265200852`], DiskBox[8, 0.04327943265200852`], DiskBox[9, \
-0.04327943265200852`], DiskBox[10, 0.04327943265200852`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \
-\\\"}\\\"}]\\) is not an object with annotations.\"", 2, 9, 29, 
-   19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841213104696`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->180519354,ExpressionUUID->"13e39722-ca2f-4f7d-ab42-90c02ddc2794"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeCount", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeCount\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\).\"", 2, 9, 30, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841227099447`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->206376421,ExpressionUUID->"fd42da3b-fa64-40cf-acea-8a57fed37569"],
-
-Cell[BoxData[
- TemplateBox[{
-  "RandomSample", "lrwl", 
-   "\"The set of items to sample from, \\!\\(\\*RowBox[{\\\"EdgeList\\\", \
-\\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]\\), should be a non-empty list or a rule weights -> choices.\"", 
-   2, 9, 31, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841239899855`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->512079010,ExpressionUUID->"c7017ba8-e1d9-414a-890f-1db27f282ea4"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeDelete", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\",\\\", RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}]\\).\"", 2, 9, 32, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841252463446`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->954985824,ExpressionUUID->"97a35c6b-ff88-4c6a-bb8a-ecaa29378a82"],
-
-Cell[BoxData[
- TemplateBox[{
-  "General", "stop", 
-   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"EdgeDelete\\\", \
-\\\"::\\\", \\\"graph\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
-during this calculation.\"", 2, 9, 33, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284126600039*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->362136176,ExpressionUUID->"5299de97-5d14-43fb-9a27-2751f22f728c"],
-
-Cell[BoxData[
- TemplateBox[{
-  "EdgeAdd", "graph", 
-   "\"A graph object is expected at position \\!\\(\\*RowBox[{\\\"1\\\"}]\\) \
-in \\!\\(\\*RowBox[{\\\"EdgeAdd\\\", \\\"[\\\", \
-RowBox[{RowBox[{\\\"EdgeDelete\\\", \\\"[\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\",\\\", RowBox[{\\\"EdgeList\\\", \\\"[\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"]\\\"}]}], \\\"]\\\"}], \\\",\\\", RowBox[{RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \\\"}\\\"}], \
-\\\"\[DirectedEdge]\\\", RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \
-\\\"}\\\"}]}]}], \\\"]\\\"}]\\).\"", 2, 9, 34, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.8662841279170675`*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->159602605,ExpressionUUID->"2365a28a-7d82-4585-873a-f49d2fc66030"],
-
-Cell[BoxData[
- TemplateBox[{
-  "General", "stop", 
-   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"EdgeAdd\\\", \
-\\\"::\\\", \\\"graph\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
-during this calculation.\"", 2, 9, 35, 19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.86628412925241*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->352191457,ExpressionUUID->"11584788-23d2-4aca-89b6-1ca5cddc899a"],
-
-Cell[BoxData[
- TemplateBox[{
-  "AnnotationValue", "pvobj", 
-   "\"\\!\\(\\*RowBox[{\\\"{\\\", \
-GraphicsBox[NamespaceBox[\\\"NetworkGraphics\\\", \
-DynamicModuleBox[List[Set[Typeset`graph, HoldComplete[Graph[List[1, 2, 3, 4, \
-5, 6, 7, 8, 9, 10], List[Null, SparseArray[Automatic, List[10, 10], 0, \
-List[1, List[List[0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14], List[List[4], \
-List[4], List[5], List[2], List[3], List[10], List[3], List[8], List[7], \
-List[9], List[6], List[5], List[6], List[4]]], Pattern]]]]]]], \
-TagBox[GraphicsGroupBox[GraphicsComplexBox[List[List[3.4809256151212615`, \
--2.193595159589839`], List[0.29534472225265707`, -1.6029057150845234`], \
-List[2.0974114041924423`, -0.9498828348044803`], List[0.9635748018531753`, \
--0.9496289873513717`], List[3.167921375220388`, -0.9498028956294193`], \
-List[1.2946554787105176`, -2.193595159589837`], List[2.2953442475230883`, \
--2.1935951595898406`], List[4.075817538214121`, -0.9496345558752995`], \
-List[0.29534472225265684`, -2.1935951595898406`], List[0.29817447322140866`, \
--0.29534472225265684`]], List[List[Directive[Opacity[0.7`], Hue[0.6`, 0.7`, \
-0.5`]], Arrowheads[0.`], List[ArrowBox[List[List[2, 4], List[3, 4], List[3, \
-5], List[4, 10], List[5, 8], List[6, 7], List[6, 9]], \
-0.035586618791352415`]]], List[Directive[Hue[0.6`, 0.2`, 0.8`], \
-EdgeForm[Directive[GrayLevel[0], Opacity[0.7`]]]], DiskBox[1, \
-0.035586618791352415`], DiskBox[2, 0.035586618791352415`], DiskBox[3, \
-0.035586618791352415`], DiskBox[4, 0.035586618791352415`], DiskBox[5, \
-0.035586618791352415`], DiskBox[6, 0.035586618791352415`], DiskBox[7, \
-0.035586618791352415`], DiskBox[8, 0.035586618791352415`], DiskBox[9, \
-0.035586618791352415`], DiskBox[10, 0.035586618791352415`]]]]], \
-MouseAppearanceTag[\\\"NetworkGraphics\\\"]], Rule[AllowKernelInitialization, \
-False]]], List[Rule[FormatType, TraditionalForm], Rule[FrameTicks, None], \
-Rule[DefaultBaseStyle, List[\\\"NetworkGraphics\\\", \
-Rule[FrontEnd`GraphicsHighlightColor, Hue[0.8`, 1.`, 0.6`]]]]]], \
-\\\"}\\\"}]\\) is not an object with annotations.\"", 2, 9, 36, 
-   19441317491031776571, "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.8662840199323616`*^9, 3.866284130665105*^9},
- CellLabel->"During evaluation of In[9]:=",
- CellID->46585710,ExpressionUUID->"d14446b0-1256-43e4-9a4e-99f6969a2ca9"],
-
-Cell[BoxData[
- RowBox[{"{", 
+ RowBox[{"RandomMixedGraph", "[", 
   RowBox[{
-   RowBox[{"Graph", "[", 
-    RowBox[{
-     RowBox[{"EdgeAdd", "[", 
-      RowBox[{
-       RowBox[{"EdgeDelete", "[", 
-        RowBox[{
-         RowBox[{"EdgeAdd", "[", 
-          RowBox[{
-           RowBox[{"EdgeDelete", "[", 
-            RowBox[{
-             RowBox[{"{", 
-              GraphicsBox[
-               NamespaceBox["NetworkGraphics",
-                DynamicModuleBox[{Typeset`graph = HoldComplete[
-                  Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                    SparseArray[
-                    Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                 
-                 TagBox[GraphicsGroupBox[
-                   GraphicsComplexBox[{{
-                    5.034199127659932, -0.2888748111896138}, {
-                    0.288874811189614, -0.859275677191532}, {
-                    4.488771736800847, -1.0022339602446049`}, {
-                    3.0980146504803967`, -2.7588498459172364`}, {
-                    0.28887481118961383`, -2.7588498459172364`}, {
-                    3.339675211070711, -1.3281124841780385`}, {
-                    3.335172127865607, -2.1811002235380084`}, {
-                    2.1911495616350702`, -1.1313103046413384`}, {
-                    5.329404867391951, -1.3355873340720468`}, {
-                    1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                  MouseAppearanceTag["NetworkGraphics"]],
-                 AllowKernelInitialization->False]],
-               
-               DefaultBaseStyle->{
-                "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                 Hue[0.8, 1., 0.6]},
-               FormatType->TraditionalForm,
-               FrameTicks->None], "}"}], ",", 
-             RowBox[{"EdgeList", "[", 
-              RowBox[{"{", 
-               GraphicsBox[
-                NamespaceBox["NetworkGraphics",
-                 DynamicModuleBox[{Typeset`graph = HoldComplete[
-                   Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                    SparseArray[
-                    Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                  
-                  TagBox[GraphicsGroupBox[
-                    GraphicsComplexBox[{{
-                    5.034199127659932, -0.2888748111896138}, {
-                    0.288874811189614, -0.859275677191532}, {
-                    4.488771736800847, -1.0022339602446049`}, {
-                    3.0980146504803967`, -2.7588498459172364`}, {
-                    0.28887481118961383`, -2.7588498459172364`}, {
-                    3.339675211070711, -1.3281124841780385`}, {
-                    3.335172127865607, -2.1811002235380084`}, {
-                    2.1911495616350702`, -1.1313103046413384`}, {
-                    5.329404867391951, -1.3355873340720468`}, {
-                    1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                   MouseAppearanceTag["NetworkGraphics"]],
-                  AllowKernelInitialization->False]],
-                
-                DefaultBaseStyle->{
-                 "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                  Hue[0.8, 1., 0.6]},
-                FormatType->TraditionalForm,
-                FrameTicks->None], "}"}], "]"}]}], "]"}], ",", 
-           RowBox[{
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   5.034199127659932, -0.2888748111896138}, {
-                   0.288874811189614, -0.859275677191532}, {
-                   4.488771736800847, -1.0022339602446049`}, {
-                   3.0980146504803967`, -2.7588498459172364`}, {
-                   0.28887481118961383`, -2.7588498459172364`}, {
-                   3.339675211070711, -1.3281124841780385`}, {
-                   3.335172127865607, -2.1811002235380084`}, {
-                   2.1911495616350702`, -1.1313103046413384`}, {
-                   5.329404867391951, -1.3355873340720468`}, {
-                   1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}], "\[DirectedEdge]", 
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   5.034199127659932, -0.2888748111896138}, {
-                   0.288874811189614, -0.859275677191532}, {
-                   4.488771736800847, -1.0022339602446049`}, {
-                   3.0980146504803967`, -2.7588498459172364`}, {
-                   0.28887481118961383`, -2.7588498459172364`}, {
-                   3.339675211070711, -1.3281124841780385`}, {
-                   3.335172127865607, -2.1811002235380084`}, {
-                   2.1911495616350702`, -1.1313103046413384`}, {
-                   5.329404867391951, -1.3355873340720468`}, {
-                   1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}]}]}], "]"}], ",", 
-         RowBox[{"Floor", "[", 
-          RowBox[{"0.2`", " ", 
-           RowBox[{"EdgeCount", "[", 
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   5.034199127659932, -0.2888748111896138}, {
-                   0.288874811189614, -0.859275677191532}, {
-                   4.488771736800847, -1.0022339602446049`}, {
-                   3.0980146504803967`, -2.7588498459172364`}, {
-                   0.28887481118961383`, -2.7588498459172364`}, {
-                   3.339675211070711, -1.3281124841780385`}, {
-                   3.335172127865607, -2.1811002235380084`}, {
-                   2.1911495616350702`, -1.1313103046413384`}, {
-                   5.329404867391951, -1.3355873340720468`}, {
-                   1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}], "]"}]}], "]"}]}], "]"}], ",", 
-       RowBox[{
-        RowBox[{"0.2`", " ", 
-         RowBox[{"EdgeCount", "[", 
-          RowBox[{"{", 
-           GraphicsBox[
-            NamespaceBox["NetworkGraphics",
-             DynamicModuleBox[{Typeset`graph = HoldComplete[
-               Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                 SparseArray[
-                 Automatic, {10, 10}, 0, {
-                  1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {1}, {
-                    6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {8}}}, 
-                   Pattern}]}]]}, 
-              
-              TagBox[GraphicsGroupBox[
-                GraphicsComplexBox[{{
-                 5.034199127659932, -0.2888748111896138}, {
-                 0.288874811189614, -0.859275677191532}, {
-                 4.488771736800847, -1.0022339602446049`}, {
-                 3.0980146504803967`, -2.7588498459172364`}, {
-                 0.28887481118961383`, -2.7588498459172364`}, {
-                 3.339675211070711, -1.3281124841780385`}, {
-                 3.335172127865607, -2.1811002235380084`}, {
-                 2.1911495616350702`, -1.1313103046413384`}, {
-                 5.329404867391951, -1.3355873340720468`}, {
-                 1.1480243570824133`, -0.9791787816726583}}, {
-                  {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                   ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                  {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}],
-                    DiskBox[1, 0.04327943265200852], 
-                   DiskBox[2, 0.04327943265200852], 
-                   DiskBox[3, 0.04327943265200852], 
-                   DiskBox[4, 0.04327943265200852], 
-                   DiskBox[5, 0.04327943265200852], 
-                   DiskBox[6, 0.04327943265200852], 
-                   DiskBox[7, 0.04327943265200852], 
-                   DiskBox[8, 0.04327943265200852], 
-                   DiskBox[9, 0.04327943265200852], 
-                   DiskBox[10, 0.04327943265200852]}}]],
-               MouseAppearanceTag["NetworkGraphics"]],
-              AllowKernelInitialization->False]],
-            
-            DefaultBaseStyle->{
-             "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-              Hue[0.8, 1., 0.6]},
-            FormatType->TraditionalForm,
-            FrameTicks->None], "}"}], "]"}]}], "\[DirectedEdge]", 
-        RowBox[{"0.2`", " ", 
-         RowBox[{"EdgeCount", "[", 
-          RowBox[{"{", 
-           GraphicsBox[
-            NamespaceBox["NetworkGraphics",
-             DynamicModuleBox[{Typeset`graph = HoldComplete[
-               Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                 SparseArray[
-                 Automatic, {10, 10}, 0, {
-                  1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {1}, {
-                    6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {8}}}, 
-                   Pattern}]}]]}, 
-              
-              TagBox[GraphicsGroupBox[
-                GraphicsComplexBox[{{
-                 5.034199127659932, -0.2888748111896138}, {
-                 0.288874811189614, -0.859275677191532}, {
-                 4.488771736800847, -1.0022339602446049`}, {
-                 3.0980146504803967`, -2.7588498459172364`}, {
-                 0.28887481118961383`, -2.7588498459172364`}, {
-                 3.339675211070711, -1.3281124841780385`}, {
-                 3.335172127865607, -2.1811002235380084`}, {
-                 2.1911495616350702`, -1.1313103046413384`}, {
-                 5.329404867391951, -1.3355873340720468`}, {
-                 1.1480243570824133`, -0.9791787816726583}}, {
-                  {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                   ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                  {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}],
-                    DiskBox[1, 0.04327943265200852], 
-                   DiskBox[2, 0.04327943265200852], 
-                   DiskBox[3, 0.04327943265200852], 
-                   DiskBox[4, 0.04327943265200852], 
-                   DiskBox[5, 0.04327943265200852], 
-                   DiskBox[6, 0.04327943265200852], 
-                   DiskBox[7, 0.04327943265200852], 
-                   DiskBox[8, 0.04327943265200852], 
-                   DiskBox[9, 0.04327943265200852], 
-                   DiskBox[10, 0.04327943265200852]}}]],
-               MouseAppearanceTag["NetworkGraphics"]],
-              AllowKernelInitialization->False]],
-            
-            DefaultBaseStyle->{
-             "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-              Hue[0.8, 1., 0.6]},
-            FormatType->TraditionalForm,
-            FrameTicks->None], "}"}], "]"}]}]}]}], "]"}], ",", 
-     RowBox[{"EdgeWeight", "\[Rule]", 
-      RowBox[{"EdgeList", "[", 
-       RowBox[{
-        RowBox[{"EdgeList", "[", 
-         RowBox[{"{", 
-          GraphicsBox[
-           NamespaceBox["NetworkGraphics",
-            DynamicModuleBox[{Typeset`graph = HoldComplete[
-              Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                SparseArray[
-                Automatic, {10, 10}, 0, {
-                 1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {1}, {
-                   6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {8}}}, 
-                  Pattern}]}]]}, 
-             
-             TagBox[GraphicsGroupBox[
-               GraphicsComplexBox[{{5.034199127659932, -0.2888748111896138}, {
-                0.288874811189614, -0.859275677191532}, {
-                4.488771736800847, -1.0022339602446049`}, {
-                3.0980146504803967`, -2.7588498459172364`}, {
-                0.28887481118961383`, -2.7588498459172364`}, {
-                3.339675211070711, -1.3281124841780385`}, {
-                3.335172127865607, -2.1811002235380084`}, {
-                2.1911495616350702`, -1.1313103046413384`}, {
-                5.329404867391951, -1.3355873340720468`}, {
-                1.1480243570824133`, -0.9791787816726583}}, {
-                 {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                  ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 8}, {
-                   8, 10}}, 0.04327943265200852]}, 
-                 {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
-                  DiskBox[1, 0.04327943265200852], 
-                  DiskBox[2, 0.04327943265200852], 
-                  DiskBox[3, 0.04327943265200852], 
-                  DiskBox[4, 0.04327943265200852], 
-                  DiskBox[5, 0.04327943265200852], 
-                  DiskBox[6, 0.04327943265200852], 
-                  DiskBox[7, 0.04327943265200852], 
-                  DiskBox[8, 0.04327943265200852], 
-                  DiskBox[9, 0.04327943265200852], 
-                  DiskBox[10, 0.04327943265200852]}}]],
-              MouseAppearanceTag["NetworkGraphics"]],
-             AllowKernelInitialization->False]],
-           
-           DefaultBaseStyle->{
-            "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-             Hue[0.8, 1., 0.6]},
-           FormatType->TraditionalForm,
-           FrameTicks->None], "}"}], "]"}], "\[Rule]", 
-        RowBox[{"AnnotationValue", "[", 
-         RowBox[{
-          RowBox[{"{", 
-           RowBox[{
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   5.034199127659932, -0.2888748111896138}, {
-                   0.288874811189614, -0.859275677191532}, {
-                   4.488771736800847, -1.0022339602446049`}, {
-                   3.0980146504803967`, -2.7588498459172364`}, {
-                   0.28887481118961383`, -2.7588498459172364`}, {
-                   3.339675211070711, -1.3281124841780385`}, {
-                   3.335172127865607, -2.1811002235380084`}, {
-                   2.1911495616350702`, -1.1313103046413384`}, {
-                   5.329404867391951, -1.3355873340720468`}, {
-                   1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}], ",", 
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 1, 2, 5, 5, 5, 8, 9, 11, 12, 14}, {{3}, {10}, {
-                    1}, {6}, {9}, {3}, {7}, {8}, {6}, {6}, {10}, {3}, {2}, {
-                    8}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   5.034199127659932, -0.2888748111896138}, {
-                   0.288874811189614, -0.859275677191532}, {
-                   4.488771736800847, -1.0022339602446049`}, {
-                   3.0980146504803967`, -2.7588498459172364`}, {
-                   0.28887481118961383`, -2.7588498459172364`}, {
-                   3.339675211070711, -1.3281124841780385`}, {
-                   3.335172127865607, -2.1811002235380084`}, {
-                   2.1911495616350702`, -1.1313103046413384`}, {
-                   5.329404867391951, -1.3355873340720468`}, {
-                   1.1480243570824133`, -0.9791787816726583}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{1, 3}, {2, 10}, {3, 6}, {3, 9}, {6, 7}, {6, 
-                    8}, {8, 10}}, 0.04327943265200852]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.04327943265200852], 
-                    DiskBox[2, 0.04327943265200852], 
-                    DiskBox[3, 0.04327943265200852], 
-                    DiskBox[4, 0.04327943265200852], 
-                    DiskBox[5, 0.04327943265200852], 
-                    DiskBox[6, 0.04327943265200852], 
-                    DiskBox[7, 0.04327943265200852], 
-                    DiskBox[8, 0.04327943265200852], 
-                    DiskBox[9, 0.04327943265200852], 
-                    DiskBox[10, 0.04327943265200852]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}]}], "}"}], ",", "EdgeWeight"}], "]"}]}],
-        "]"}]}]}], "]"}], ",", 
-   RowBox[{"Graph", "[", 
-    RowBox[{
-     RowBox[{"EdgeAdd", "[", 
-      RowBox[{
-       RowBox[{"EdgeDelete", "[", 
-        RowBox[{
-         RowBox[{"EdgeAdd", "[", 
-          RowBox[{
-           RowBox[{"EdgeDelete", "[", 
-            RowBox[{
-             RowBox[{"{", 
-              GraphicsBox[
-               NamespaceBox["NetworkGraphics",
-                DynamicModuleBox[{Typeset`graph = HoldComplete[
-                  Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                    SparseArray[
-                    Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                 
-                 TagBox[GraphicsGroupBox[
-                   GraphicsComplexBox[{{
-                    3.4809256151212615`, -2.193595159589839}, {
-                    0.29534472225265707`, -1.6029057150845234`}, {
-                    2.0974114041924423`, -0.9498828348044803}, {
-                    0.9635748018531753, -0.9496289873513717}, {
-                    3.167921375220388, -0.9498028956294193}, {
-                    1.2946554787105176`, -2.193595159589837}, {
-                    2.2953442475230883`, -2.1935951595898406`}, {
-                    4.075817538214121, -0.9496345558752995}, {
-                    0.29534472225265684`, -2.1935951595898406`}, {
-                    0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                  MouseAppearanceTag["NetworkGraphics"]],
-                 AllowKernelInitialization->False]],
-               
-               DefaultBaseStyle->{
-                "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                 Hue[0.8, 1., 0.6]},
-               FormatType->TraditionalForm,
-               FrameTicks->None], "}"}], ",", 
-             RowBox[{"EdgeList", "[", 
-              RowBox[{"{", 
-               GraphicsBox[
-                NamespaceBox["NetworkGraphics",
-                 DynamicModuleBox[{Typeset`graph = HoldComplete[
-                   Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                    SparseArray[
-                    Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                  
-                  TagBox[GraphicsGroupBox[
-                    GraphicsComplexBox[{{
-                    3.4809256151212615`, -2.193595159589839}, {
-                    0.29534472225265707`, -1.6029057150845234`}, {
-                    2.0974114041924423`, -0.9498828348044803}, {
-                    0.9635748018531753, -0.9496289873513717}, {
-                    3.167921375220388, -0.9498028956294193}, {
-                    1.2946554787105176`, -2.193595159589837}, {
-                    2.2953442475230883`, -2.1935951595898406`}, {
-                    4.075817538214121, -0.9496345558752995}, {
-                    0.29534472225265684`, -2.1935951595898406`}, {
-                    0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                   MouseAppearanceTag["NetworkGraphics"]],
-                  AllowKernelInitialization->False]],
-                
-                DefaultBaseStyle->{
-                 "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                  Hue[0.8, 1., 0.6]},
-                FormatType->TraditionalForm,
-                FrameTicks->None], "}"}], "]"}]}], "]"}], ",", 
-           RowBox[{
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   3.4809256151212615`, -2.193595159589839}, {
-                   0.29534472225265707`, -1.6029057150845234`}, {
-                   2.0974114041924423`, -0.9498828348044803}, {
-                   0.9635748018531753, -0.9496289873513717}, {
-                   3.167921375220388, -0.9498028956294193}, {
-                   1.2946554787105176`, -2.193595159589837}, {
-                   2.2953442475230883`, -2.1935951595898406`}, {
-                   4.075817538214121, -0.9496345558752995}, {
-                   0.29534472225265684`, -2.1935951595898406`}, {
-                   0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}], "\[DirectedEdge]", 
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   3.4809256151212615`, -2.193595159589839}, {
-                   0.29534472225265707`, -1.6029057150845234`}, {
-                   2.0974114041924423`, -0.9498828348044803}, {
-                   0.9635748018531753, -0.9496289873513717}, {
-                   3.167921375220388, -0.9498028956294193}, {
-                   1.2946554787105176`, -2.193595159589837}, {
-                   2.2953442475230883`, -2.1935951595898406`}, {
-                   4.075817538214121, -0.9496345558752995}, {
-                   0.29534472225265684`, -2.1935951595898406`}, {
-                   0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}]}]}], "]"}], ",", 
-         RowBox[{"Floor", "[", 
-          RowBox[{"0.2`", " ", 
-           RowBox[{"EdgeCount", "[", 
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   3.4809256151212615`, -2.193595159589839}, {
-                   0.29534472225265707`, -1.6029057150845234`}, {
-                   2.0974114041924423`, -0.9498828348044803}, {
-                   0.9635748018531753, -0.9496289873513717}, {
-                   3.167921375220388, -0.9498028956294193}, {
-                   1.2946554787105176`, -2.193595159589837}, {
-                   2.2953442475230883`, -2.1935951595898406`}, {
-                   4.075817538214121, -0.9496345558752995}, {
-                   0.29534472225265684`, -2.1935951595898406`}, {
-                   0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}], "]"}]}], "]"}]}], "]"}], ",", 
-       RowBox[{
-        RowBox[{"0.2`", " ", 
-         RowBox[{"EdgeCount", "[", 
-          RowBox[{"{", 
-           GraphicsBox[
-            NamespaceBox["NetworkGraphics",
-             DynamicModuleBox[{Typeset`graph = HoldComplete[
-               Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                 SparseArray[
-                 Automatic, {10, 10}, 0, {
-                  1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-              
-              TagBox[GraphicsGroupBox[
-                GraphicsComplexBox[{{
-                 3.4809256151212615`, -2.193595159589839}, {
-                 0.29534472225265707`, -1.6029057150845234`}, {
-                 2.0974114041924423`, -0.9498828348044803}, {
-                 0.9635748018531753, -0.9496289873513717}, {
-                 3.167921375220388, -0.9498028956294193}, {
-                 1.2946554787105176`, -2.193595159589837}, {
-                 2.2953442475230883`, -2.1935951595898406`}, {
-                 4.075817538214121, -0.9496345558752995}, {
-                 0.29534472225265684`, -2.1935951595898406`}, {
-                 0.29817447322140866`, -0.29534472225265684`}}, {
-                  {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                   ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                  {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}],
-                    DiskBox[1, 0.035586618791352415], 
-                   DiskBox[2, 0.035586618791352415], 
-                   DiskBox[3, 0.035586618791352415], 
-                   DiskBox[4, 0.035586618791352415], 
-                   DiskBox[5, 0.035586618791352415], 
-                   DiskBox[6, 0.035586618791352415], 
-                   DiskBox[7, 0.035586618791352415], 
-                   DiskBox[8, 0.035586618791352415], 
-                   DiskBox[9, 0.035586618791352415], 
-                   DiskBox[10, 0.035586618791352415]}}]],
-               MouseAppearanceTag["NetworkGraphics"]],
-              AllowKernelInitialization->False]],
-            
-            DefaultBaseStyle->{
-             "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-              Hue[0.8, 1., 0.6]},
-            FormatType->TraditionalForm,
-            FrameTicks->None], "}"}], "]"}]}], "\[DirectedEdge]", 
-        RowBox[{"0.2`", " ", 
-         RowBox[{"EdgeCount", "[", 
-          RowBox[{"{", 
-           GraphicsBox[
-            NamespaceBox["NetworkGraphics",
-             DynamicModuleBox[{Typeset`graph = HoldComplete[
-               Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                 SparseArray[
-                 Automatic, {10, 10}, 0, {
-                  1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-              
-              TagBox[GraphicsGroupBox[
-                GraphicsComplexBox[{{
-                 3.4809256151212615`, -2.193595159589839}, {
-                 0.29534472225265707`, -1.6029057150845234`}, {
-                 2.0974114041924423`, -0.9498828348044803}, {
-                 0.9635748018531753, -0.9496289873513717}, {
-                 3.167921375220388, -0.9498028956294193}, {
-                 1.2946554787105176`, -2.193595159589837}, {
-                 2.2953442475230883`, -2.1935951595898406`}, {
-                 4.075817538214121, -0.9496345558752995}, {
-                 0.29534472225265684`, -2.1935951595898406`}, {
-                 0.29817447322140866`, -0.29534472225265684`}}, {
-                  {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                   ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                  {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}],
-                    DiskBox[1, 0.035586618791352415], 
-                   DiskBox[2, 0.035586618791352415], 
-                   DiskBox[3, 0.035586618791352415], 
-                   DiskBox[4, 0.035586618791352415], 
-                   DiskBox[5, 0.035586618791352415], 
-                   DiskBox[6, 0.035586618791352415], 
-                   DiskBox[7, 0.035586618791352415], 
-                   DiskBox[8, 0.035586618791352415], 
-                   DiskBox[9, 0.035586618791352415], 
-                   DiskBox[10, 0.035586618791352415]}}]],
-               MouseAppearanceTag["NetworkGraphics"]],
-              AllowKernelInitialization->False]],
-            
-            DefaultBaseStyle->{
-             "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-              Hue[0.8, 1., 0.6]},
-            FormatType->TraditionalForm,
-            FrameTicks->None], "}"}], "]"}]}]}]}], "]"}], ",", 
-     RowBox[{"EdgeWeight", "\[Rule]", 
-      RowBox[{"EdgeList", "[", 
-       RowBox[{
-        RowBox[{"EdgeList", "[", 
-         RowBox[{"{", 
-          GraphicsBox[
-           NamespaceBox["NetworkGraphics",
-            DynamicModuleBox[{Typeset`graph = HoldComplete[
-              Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                SparseArray[
-                Automatic, {10, 10}, 0, {
-                 1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {5}, {
-                   2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {4}}}, 
-                  Pattern}]}]]}, 
-             
-             TagBox[GraphicsGroupBox[
-               GraphicsComplexBox[{{
-                3.4809256151212615`, -2.193595159589839}, {
-                0.29534472225265707`, -1.6029057150845234`}, {
-                2.0974114041924423`, -0.9498828348044803}, {
-                0.9635748018531753, -0.9496289873513717}, {
-                3.167921375220388, -0.9498028956294193}, {
-                1.2946554787105176`, -2.193595159589837}, {
-                2.2953442475230883`, -2.1935951595898406`}, {
-                4.075817538214121, -0.9496345558752995}, {
-                0.29534472225265684`, -2.1935951595898406`}, {
-                0.29817447322140866`, -0.29534472225265684`}}, {
-                 {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                  ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 7}, {
-                   6, 9}}, 0.035586618791352415`]}, 
-                 {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
-                  DiskBox[1, 0.035586618791352415], 
-                  DiskBox[2, 0.035586618791352415], 
-                  DiskBox[3, 0.035586618791352415], 
-                  DiskBox[4, 0.035586618791352415], 
-                  DiskBox[5, 0.035586618791352415], 
-                  DiskBox[6, 0.035586618791352415], 
-                  DiskBox[7, 0.035586618791352415], 
-                  DiskBox[8, 0.035586618791352415], 
-                  DiskBox[9, 0.035586618791352415], 
-                  DiskBox[10, 0.035586618791352415]}}]],
-              MouseAppearanceTag["NetworkGraphics"]],
-             AllowKernelInitialization->False]],
-           
-           DefaultBaseStyle->{
-            "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-             Hue[0.8, 1., 0.6]},
-           FormatType->TraditionalForm,
-           FrameTicks->None], "}"}], "]"}], "\[Rule]", 
-        RowBox[{"AnnotationValue", "[", 
-         RowBox[{
-          RowBox[{"{", 
-           RowBox[{
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   3.4809256151212615`, -2.193595159589839}, {
-                   0.29534472225265707`, -1.6029057150845234`}, {
-                   2.0974114041924423`, -0.9498828348044803}, {
-                   0.9635748018531753, -0.9496289873513717}, {
-                   3.167921375220388, -0.9498028956294193}, {
-                   1.2946554787105176`, -2.193595159589837}, {
-                   2.2953442475230883`, -2.1935951595898406`}, {
-                   4.075817538214121, -0.9496345558752995}, {
-                   0.29534472225265684`, -2.1935951595898406`}, {
-                   0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}], ",", 
-            RowBox[{"{", 
-             GraphicsBox[
-              NamespaceBox["NetworkGraphics",
-               DynamicModuleBox[{Typeset`graph = HoldComplete[
-                 Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {Null, 
-                   SparseArray[
-                   Automatic, {10, 10}, 0, {
-                    1, {{0, 0, 1, 3, 6, 8, 10, 11, 12, 13, 14}, {{4}, {4}, {
-                    5}, {2}, {3}, {10}, {3}, {8}, {7}, {9}, {6}, {5}, {6}, {
-                    4}}}, Pattern}]}]]}, 
-                
-                TagBox[GraphicsGroupBox[
-                  GraphicsComplexBox[{{
-                   3.4809256151212615`, -2.193595159589839}, {
-                   0.29534472225265707`, -1.6029057150845234`}, {
-                   2.0974114041924423`, -0.9498828348044803}, {
-                   0.9635748018531753, -0.9496289873513717}, {
-                   3.167921375220388, -0.9498028956294193}, {
-                   1.2946554787105176`, -2.193595159589837}, {
-                   2.2953442475230883`, -2.1935951595898406`}, {
-                   4.075817538214121, -0.9496345558752995}, {
-                   0.29534472225265684`, -2.1935951595898406`}, {
-                   0.29817447322140866`, -0.29534472225265684`}}, {
-                    {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.], 
-                    ArrowBox[{{2, 4}, {3, 4}, {3, 5}, {4, 10}, {5, 8}, {6, 
-                    7}, {6, 9}}, 0.035586618791352415`]}, 
-                    {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
-                    0.7]}], DiskBox[1, 0.035586618791352415], 
-                    DiskBox[2, 0.035586618791352415], 
-                    DiskBox[3, 0.035586618791352415], 
-                    DiskBox[4, 0.035586618791352415], 
-                    DiskBox[5, 0.035586618791352415], 
-                    DiskBox[6, 0.035586618791352415], 
-                    DiskBox[7, 0.035586618791352415], 
-                    DiskBox[8, 0.035586618791352415], 
-                    DiskBox[9, 0.035586618791352415], 
-                    DiskBox[10, 0.035586618791352415]}}]],
-                 MouseAppearanceTag["NetworkGraphics"]],
-                AllowKernelInitialization->False]],
-              
-              DefaultBaseStyle->{
-               "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> 
-                Hue[0.8, 1., 0.6]},
-              FormatType->TraditionalForm,
-              FrameTicks->None], "}"}]}], "}"}], ",", "EdgeWeight"}], "]"}]}],
-        "]"}]}]}], "]"}]}], "}"}]], "Output",
- CellChangeTimes->{3.8662840531386766`*^9, 3.8662841322385807`*^9},
- CellLabel->"Out[9]=",
- CellID->442249167,ExpressionUUID->"6e4d34ac-1916-4e16-abfc-88326ea933c4"]
+   RowBox[{"BernoulliGraphDistribution", "[", 
+    RowBox[{"10", ",", "0.2`"}], "]"}], ",", "0.2`", ",", 
+   RowBox[{"{", "2", "}"}]}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.8662840531386766`*^9, 3.8662841322385807`*^9, {3.866374529347872*^9, 
+   3.866374540752598*^9}},
+ CellLabel->"Out[172]=",
+ CellID->852436364,ExpressionUUID->"2366d369-e08b-4749-b39a-c7023d1028ff"]
 }, Open  ]],
 
 Cell["\<\
@@ -34739,7 +32745,7 @@ Cell["Additional information for the reviewer.", "Text",
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1141.8, 574.8},
+WindowSize->{1141.8, 580.8},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 DockedCells->{
   Cell[
